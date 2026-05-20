@@ -1,871 +1,402 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>T4emo — Junior C/C++/Java Developer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="T4emo · Junior C / C++ / Java developer. Portfolio of low-level systems projects." />
-
-  <!-- Fonts: a clean sans for UI + a mono for dev-y accents -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=Geist:wght@400;500;700&display=swap" rel="stylesheet" />
-
-  <style>
-    /* ────────────────────────────────────────────────────────────
-       DESIGN TOKENS (CSS variables — easy to tweak)
-       ──────────────────────────────────────────────────────────── */
-    :root {
-      /* Color — dark mode */
-      --bg:        #0b0b0d;
-      --bg-elev:   #131318;
-      --bg-soft:   #1a1a20;
-      --border:    #26262e;
-      --border-strong: #3a3a44;
-      --text:      #ececea;
-      --muted:     #7c7c87;
-      --dim:       #4a4a52;
-      --accent:    #ff6b3d;   /* default coral — tweakable */
-      --accent-soft: color-mix(in oklab, var(--accent) 14%, transparent);
-
-      /* Type */
-      --font-ui:   'Space Grotesk', system-ui, sans-serif;
-      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-
-      /* Geometry */
-      --maxw: 920px;
-      --pad-x: 28px;
-      --radius: 6px;
-    }
-
-    /* ────────────────────────────────────────────────────────────
-       RESET + BASE
-       ──────────────────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-ui);
-      font-size: 16px;
-      line-height: 1.55;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-    a { color: inherit; text-decoration: none; }
-    h1, h2, h3, p { margin: 0; }
-    ::selection { background: var(--accent); color: #0b0b0d; }
-
-    /* Page background — subtle radial wash so it isn't flat */
-    body::before {
-      content: "";
-      position: fixed; inset: 0;
-      background:
-        radial-gradient(900px 600px at 78% -10%, var(--accent-soft), transparent 60%),
-        radial-gradient(700px 500px at -10% 80%, color-mix(in oklab, var(--accent) 6%, transparent), transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Layout container */
-    .wrap {
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: 0 var(--pad-x);
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ────────────────────────────────────────────────────────────
-       NAV (sticky, blurred)
-       ──────────────────────────────────────────────────────────── */
-    .nav {
-      position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      background: color-mix(in oklab, var(--bg) 75%, transparent);
-      border-bottom: 1px solid transparent;
-      transition: border-color .25s ease;
-    }
-    .nav.scrolled { border-bottom-color: var(--border); }
-    .nav-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 0;
-    }
-    .brand {
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      font-size: 17px;
-      display: inline-flex; align-items: baseline; gap: 2px;
-    }
-    .brand .dot { color: var(--accent); }
-    .nav-links {
-      display: flex; gap: 22px;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .nav-links a {
-      transition: color .15s ease;
-      position: relative;
-      padding-bottom: 2px;
-    }
-    .nav-links a:hover { color: var(--text); }
-    .nav-links a.active { color: var(--text); }
-    .nav-links a.active::after {
-      content: "";
-      position: absolute; left: 0; right: 0; bottom: -2px;
-      height: 1px; background: var(--accent);
-    }
-
-    /* ────────────────────────────────────────────────────────────
-       HERO
-       ──────────────────────────────────────────────────────────── */
-    .hero {
-      padding: 110px 0 90px;
-    }
-    .hello {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--muted);
-      display: inline-flex; align-items: center; gap: 8px;
-      margin-bottom: 22px;
-    }
-    .hello .pulse {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 0 var(--accent);
-      animation: pulse 2.4s ease-out infinite;
-    }
-    @keyframes pulse {
-      0%   { box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 50%, transparent); }
-      70%  { box-shadow: 0 0 0 12px transparent; }
-      100% { box-shadow: 0 0 0 0 transparent; }
-    }
-    .hero h1 {
-      font-size: clamp(64px, 11vw, 120px);
-      line-height: 0.95;
-      letter-spacing: -0.04em;
-      font-weight: 600;
-      margin: 0;
-    }
-    .hero h1 .cursor {
-      display: inline-block;
-      width: 0.08em; height: 0.85em;
-      background: var(--accent);
-      vertical-align: -0.05em;
-      margin-left: 0.04em;
-      animation: blink 1s steps(1) infinite;
-    }
-    @keyframes blink { 50% { opacity: 0; } }
-
-    .hero .tag {
-      margin-top: 26px;
-      font-size: 20px;
-      max-width: 540px;
-    }
-    .hero .tag b { color: var(--accent); font-weight: 600; }
-    .hero .sub {
-      margin-top: 10px;
-      color: var(--muted);
-      max-width: 480px;
-      font-size: 15px;
-    }
-    .cta-row {
-      display: flex; gap: 10px;
-      margin-top: 32px;
-    }
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 11px 18px;
-      border-radius: var(--radius);
-      font-family: var(--font-mono);
-      font-size: 13px;
-      font-weight: 500;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      cursor: pointer;
-      transition: all .18s ease;
-    }
-    .btn:hover { border-color: var(--border-strong); transform: translateY(-1px); }
-    .btn.primary {
-      background: var(--accent);
-      color: #0b0b0d;
-      border-color: var(--accent);
-    }
-    .btn.primary:hover {
-      filter: brightness(1.08);
-      box-shadow: 0 6px 20px -8px var(--accent);
-    }
-
-    /* ────────────────────────────────────────────────────────────
-       SECTIONS
-       ──────────────────────────────────────────────────────────── */
-    section { padding: 60px 0; scroll-margin-top: 80px; }
-    .section-head {
-      display: flex; align-items: baseline; gap: 14px;
-      margin-bottom: 28px;
-    }
-    .section-head .num {
-      font-family: var(--font-mono);
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .section-head h2 {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-    .section-head .rule {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ────────────────────────────────────────────────────────────
-       SKILLS
-       ──────────────────────────────────────────────────────────── */
-    .skills {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    .skill-group {
-      border-top: 1px solid var(--border);
-      padding-top: 16px;
-    }
-    .skill-group h3 {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      margin-bottom: 14px;
-    }
-    .chips {
-      display: flex; flex-wrap: wrap; gap: 6px;
-    }
-    .chip {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      padding: 4px 10px;
-      border: 1px solid var(--border);
-      border-radius: 99px;
-      color: var(--text);
-      transition: all .15s ease;
-    }
-    .chip:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* ────────────────────────────────────────────────────────────
-       PROJECTS
-       ──────────────────────────────────────────────────────────── */
-    .projects {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    .project {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
-      background: var(--bg-elev);
-      transition: all .2s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .project::after {
-      content: "↗";
-      position: absolute; top: 18px; right: 18px;
-      color: var(--dim);
-      font-family: var(--font-mono);
-      transition: all .2s ease;
-    }
-    .project:hover {
-      border-color: var(--border-strong);
-      transform: translateY(-2px);
-      background: var(--bg-soft);
-    }
-    .project:hover::after {
-      color: var(--accent);
-      transform: translate(2px, -2px);
-    }
-    .project .cover {
-      aspect-ratio: 16/9;
-      border-radius: 4px;
-      background:
-        repeating-linear-gradient(135deg,
-          color-mix(in oklab, var(--accent) 18%, var(--bg-soft)) 0 8px,
-          var(--bg-soft) 8px 16px);
-      border: 1px solid var(--border);
-      display: grid; place-items: center;
-      color: var(--muted);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      margin-bottom: 16px;
-      position: relative;
-    }
-    .project .num-tag {
-      position: absolute; top: 8px; left: 8px;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      padding: 2px 6px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      color: var(--muted);
-    }
-    .project h3 {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .project .desc {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 14px;
-    }
-    .project .tags {
-      display: flex; gap: 6px; flex-wrap: wrap;
-    }
-    .project .tags .chip {
-      font-size: 11px;
-      padding: 2px 8px;
-    }
-
-    /* ────────────────────────────────────────────────────────────
-       EXPERIENCE — timeline
-       ──────────────────────────────────────────────────────────── */
-    .timeline {
-      display: flex; flex-direction: column;
-    }
-    .row-item {
-      display: grid;
-      grid-template-columns: 130px 1fr;
-      gap: 24px;
-      padding: 20px 0;
-      border-top: 1px solid var(--border);
-      align-items: start;
-    }
-    .row-item:last-child { border-bottom: 1px solid var(--border); }
-    .row-item .when {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--muted);
-      padding-top: 3px;
-    }
-    .row-item .what h3 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .row-item .what h3 .at { color: var(--muted); font-weight: 400; }
-    .row-item .what p {
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .row-item .what .stack {
-      margin-top: 8px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--dim);
-    }
-
-    /* ────────────────────────────────────────────────────────────
-       CONTACT
-       ──────────────────────────────────────────────────────────── */
-    .contact {
-      text-align: center;
-      padding: 100px 0 80px;
-    }
-    .contact .lead {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-    .contact h2 {
-      font-size: clamp(40px, 7vw, 72px);
-      line-height: 1;
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      margin-bottom: 18px;
-    }
-    .contact h2 .accent { color: var(--accent); }
-    .contact .mail {
-      font-size: 18px;
-      color: var(--text);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 3px;
-      transition: border-color .2s;
-    }
-    .contact .mail:hover { border-color: var(--accent); }
-    .socials {
-      margin-top: 36px;
-      display: flex; justify-content: center; gap: 28px;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .socials a { transition: color .15s ease; }
-    .socials a:hover { color: var(--accent); }
-
-    /* Footer */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 26px 0;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--dim);
-      display: flex; justify-content: space-between;
-    }
-
-    /* ────────────────────────────────────────────────────────────
-       SCROLL REVEAL
-       ──────────────────────────────────────────────────────────── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(14px);
-      transition: opacity .6s ease, transform .6s ease;
-    }
-    .reveal.in {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ────────────────────────────────────────────────────────────
-       TWEAKS PANEL (vanilla — float bottom-right)
-       ──────────────────────────────────────────────────────────── */
-    .tweaks {
-      position: fixed; right: 18px; bottom: 18px;
-      width: 240px;
-      background: var(--bg-elev);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      z-index: 100;
-      display: none;
-      box-shadow: 0 18px 50px -12px rgba(0,0,0,0.5);
-    }
-    .tweaks.open { display: block; }
-    .tweaks-head {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-    .tweaks-head strong { font-size: 13px; }
-    .tweaks-head button {
-      background: transparent; color: var(--muted);
-      border: 0; cursor: pointer; font-family: inherit;
-    }
-    .tweaks-head button:hover { color: var(--text); }
-    .twk-group { margin-bottom: 14px; }
-    .twk-group:last-child { margin-bottom: 0; }
-    .twk-label {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .twk-fonts {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
-    }
-    .twk-font {
-      padding: 6px 8px;
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 11px;
-      transition: all .15s;
-    }
-    .twk-font.active { border-color: var(--accent); color: var(--accent); }
-    .twk-swatches { display: flex; gap: 8px; }
-    .twk-sw {
-      width: 26px; height: 26px;
-      border-radius: 99px;
-      border: 2px solid transparent;
-      cursor: pointer;
-      padding: 0;
-      transition: border-color .15s, transform .15s;
-    }
-    .twk-sw:hover { transform: scale(1.1); }
-    .twk-sw.active { border-color: var(--text); }
-
-    /* ────────────────────────────────────────────────────────────
-       RESPONSIVE
-       ──────────────────────────────────────────────────────────── */
-    @media (max-width: 720px) {
-      .nav-links { gap: 14px; font-size: 11px; }
-      .nav-links a:nth-child(n+4) { display: none; }
-      .hero { padding: 70px 0 60px; }
-      .skills { grid-template-columns: 1fr; gap: 14px; }
-      .projects { grid-template-columns: 1fr; }
-      .row-item { grid-template-columns: 90px 1fr; gap: 14px; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- ============================================================
-       NAV
-       ============================================================ -->
-  <header class="nav" id="nav">
-    <div class="wrap nav-inner">
-      <a class="brand" href="#top">T4emo<span class="dot">.</span></a>
-      <nav class="nav-links">
-        <a href="#skills">skills</a>
-        <a href="#projects">projects</a>
-        <a href="#experience">experience</a>
-        <a href="#education">education</a>
-        <a href="#contact">contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="wrap">
-
-    <!-- ============================================================
-         HERO
-         ============================================================ -->
-    <section class="hero" id="top">
-      <div class="hello reveal"><span class="pulse"></span>hello, world —</div>
-      <h1 class="reveal">T4emo<span class="cursor"></span></h1>
-      <p class="tag reveal">Junior <b>C / C++ / Java</b> developer.</p>
-      <p class="sub reveal">I build small, fast, low-level things. Currently exploring the web — this site is part of that journey.</p>
-      <div class="cta-row reveal">
-        <a class="btn primary" href="#projects">See projects ↓</a>
-        <a class="btn" href="#contact">Get in touch</a>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         SKILLS
-         ============================================================ -->
-    <section id="skills">
-      <div class="section-head reveal">
-        <h2>skills</h2>
-        <div class="rule"></div>
-      </div>
-
-      <div class="skills">
-        <div class="skill-group reveal">
-          <h3>Systems</h3>
-          <div class="chips">
-            <span class="chip">C</span>
-            <span class="chip">C++</span>
-            <span class="chip">STL</span>
-            <span class="chip">gdb</span>
-            <span class="chip">Makefile</span>
-          </div>
-        </div>
-
-        <div class="skill-group reveal">
-          <h3>JVM</h3>
-          <div class="chips">
-            <span class="chip">Java</span>
-            <span class="chip">OOP</span>
-            <span class="chip">JUnit</span>
-            <span class="chip">Maven</span>
-          </div>
-        </div>
-
-        <div class="skill-group reveal">
-          <h3>Tools</h3>
-          <div class="chips">
-            <span class="chip">Git</span>
-            <span class="chip">Linux</span>
-            <span class="chip">VS Code</span>
-            <span class="chip">CMake</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         PROJECTS
-         ============================================================ -->
-    <section id="projects">
-      <div class="section-head reveal">
-        <h2>selected projects</h2>
-        <div class="rule"></div>
-      </div>
-
-      <div class="projects">
-
-        <a href="#" class="project reveal">
-          <div class="cover"><span class="num-tag">01</span>project cover</div>
-          <h3>project_01</h3>
-          <p class="desc">Short one-line pitch — what it does and why it's interesting.</p>
-          <div class="tags">
-            <span class="chip">C++</span>
-            <span class="chip">STL</span>
-          </div>
-        </a>
-
-        <a href="#" class="project reveal">
-          <div class="cover"><span class="num-tag">02</span>project cover</div>
-          <h3>project_02</h3>
-          <p class="desc">Short one-line pitch — what it does and why it's interesting.</p>
-          <div class="tags">
-            <span class="chip">C</span>
-            <span class="chip">Linux</span>
-          </div>
-        </a>
-
-        <a href="#" class="project reveal">
-          <div class="cover"><span class="num-tag">03</span>project cover</div>
-          <h3>project_03</h3>
-          <p class="desc">Short one-line pitch — what it does and why it's interesting.</p>
-          <div class="tags">
-            <span class="chip">Java</span>
-            <span class="chip">OOP</span>
-          </div>
-        </a>
-
-        <a href="#" class="project reveal">
-          <div class="cover"><span class="num-tag">04</span>project cover</div>
-          <h3>project_04</h3>
-          <p class="desc">Short one-line pitch — what it does and why it's interesting.</p>
-          <div class="tags">
-            <span class="chip">C++</span>
-            <span class="chip">CMake</span>
-          </div>
-        </a>
-
-        <a href="#" class="project reveal">
-          <div class="cover"><span class="num-tag">05</span>project cover</div>
-          <h3>project_05</h3>
-          <p class="desc">Short one-line pitch — what it does and why it's interesting.</p>
-          <div class="tags">
-            <span class="chip">C</span>
-            <span class="chip">gdb</span>
-          </div>
-        </a>
-
-        <a href="#" class="project reveal">
-          <div class="cover"><span class="num-tag">06</span>project cover</div>
-          <h3>project_06</h3>
-          <p class="desc">Short one-line pitch — what it does and why it's interesting.</p>
-          <div class="tags">
-            <span class="chip">Java</span>
-            <span class="chip">JUnit</span>
-          </div>
-        </a>
-
-      </div>
-    </section>
-
-    <!-- ============================================================
-         EXPERIENCE
-         ============================================================ -->
-    <section id="experience">
-      <div class="section-head reveal">
-        <h2>experience</h2>
-        <div class="rule"></div>
-      </div>
-
-      <div class="timeline">
-        <div class="row-item reveal">
-          <div class="when">2024 — now</div>
-          <div class="what">
-            <h3>Junior Developer <span class="at">· Company name</span></h3>
-            <p>Working on internal C++ tools. Learning code review, build systems, and how real software gets shipped.</p>
-            <div class="stack">C++ · CMake · Git</div>
-          </div>
-        </div>
-
-        <div class="row-item reveal">
-          <div class="when">2023</div>
-          <div class="what">
-            <h3>Internship <span class="at">· Lab / company</span></h3>
-            <p>Wrote small utilities in C for a research project. First time working on a codebase larger than my own.</p>
-            <div class="stack">C · Linux · Makefile</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         EDUCATION
-         ============================================================ -->
-    <section id="education">
-      <div class="section-head reveal">
-        <h2>education</h2>
-        <div class="rule"></div>
-      </div>
-
-      <div class="timeline">
-        <div class="row-item reveal">
-          <div class="when">2021 — 2024</div>
-          <div class="what">
-            <h3>Computer Science Degree <span class="at">· School name</span></h3>
-            <p>Algorithms, data structures, systems programming, and a lot of late-night debugging.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         CONTACT
-         ============================================================ -->
-    <section class="contact" id="contact">
-      <div class="lead reveal">— contact —</div>
-      <h2 class="reveal">Let's <span class="accent">build something.</span></h2>
-      <a class="mail reveal" href="/cdn-cgi/l/email-protection#ff979a939390bf8bcb9a9290d19b9a89"><span class="__cf_email__" data-cfemail="761e131a1a19360242131b1958121300">[email&#160;protected]</span></a>
-      <div class="socials reveal">
-        <a href="#">↗ github</a>
-        <a href="#">↗ linkedin</a>
-        <a href="/cdn-cgi/l/email-protection#462e232a2a29063272232b2968222330">↗ email</a>
-      </div>
-    </section>
-
-    <footer>
-      <span>© 2026 T4emo · built by hand</span>
-      <span>last update — may 2026</span>
-    </footer>
-  </main>
-
-  <!-- ============================================================
-       TWEAKS PANEL (in-page editor for font + accent)
-       ============================================================ -->
-  <aside class="tweaks" id="tweaks">
-    <div class="tweaks-head">
-      <strong>Tweaks</strong>
-      <button id="tweaks-close" aria-label="Close">close ×</button>
-    </div>
-
-    <div class="twk-group">
-      <div class="twk-label">UI Font</div>
-      <div class="twk-fonts" id="twk-fonts">
-        <button class="twk-font" data-font="'Space Grotesk'">Space Grotesk</button>
-        <button class="twk-font" data-font="'Geist'">Geist</button>
-        <button class="twk-font" data-font="'IBM Plex Sans'">IBM Plex</button>
-        <button class="twk-font" data-font="'DM Sans'">DM Sans</button>
-        <button class="twk-font" data-font="'JetBrains Mono'">JB Mono</button>
-      </div>
-    </div>
-
-    <div class="twk-group">
-      <div class="twk-label">Accent</div>
-      <div class="twk-swatches" id="twk-swatches">
-        <button class="twk-sw" data-accent="#ff6b3d" style="background:#ff6b3d" title="coral"></button>
-        <button class="twk-sw" data-accent="#5b8cff" style="background:#5b8cff" title="blue"></button>
-        <button class="twk-sw" data-accent="#9d7bff" style="background:#9d7bff" title="violet"></button>
-        <button class="twk-sw" data-accent="#7ee787" style="background:#7ee787" title="green"></button>
-        <button class="twk-sw" data-accent="#f0c674" style="background:#f0c674" title="amber"></button>
-        <button class="twk-sw" data-accent="#ececea" style="background:#ececea" title="mono"></button>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ============================================================
-       SCRIPTS — kept small and readable for learning
-       ============================================================ -->
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    // ── 1. Nav border on scroll ───────────────────────────────
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 20);
-    });
-
-    // ── 2. Active nav link based on scroll position ───────────
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    function setActive() {
-      const y = window.scrollY + 120;
-      let current = '';
-      sections.forEach(s => {
-        if (y >= s.offsetTop) current = s.id;
-      });
-      navLinks.forEach(a => {
-        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
-      });
-    }
-    window.addEventListener('scroll', setActive);
-    setActive();
-
-    // ── 3. Reveal-on-scroll using IntersectionObserver ────────
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('in');
-          io.unobserve(e.target);
+  <head>
+    <meta charset="utf-8" />
+    <title>T4emo — Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0a0d;
+        --bg-elev: #13131a;
+        --bg-sunk: #06060a;
+        --text: #f1f1f3;
+        --text-muted: #8b8b95;
+        --border: rgba(255, 255, 255, 0.1);
+        --border-strong: rgba(255, 255, 255, 0.35);
+        --accent: #5ea0ff;
+        --accent-glow: rgba(94, 160, 255, 0.45);
+        --accent-ink: #06060a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          "Space Grotesk",
+          -apple-system,
+          system-ui,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        transition:
+          background 0.3s ease,
+          color 0.3s ease;
+        height: 100vh;
+        overflow: hidden;
+      }
+      main {
+        height: calc(100vh - 64px);
+        overflow: hidden;
+        position: relative;
+      }
+      main > section {
+        min-height: 100% !important;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-top: 40px !important;
+        padding-bottom: 40px !important;
+      }
+      main > section::-webkit-scrollbar {
+        width: 0;
+      }
+      /* page indicator dots */
+      .page-dots {
+        position: fixed;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        z-index: 40;
+      }
+      .page-dot {
+        width: 28px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        padding: 0;
+        color: var(--text-muted);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+        gap: 8px;
+        transition:
+          color 0.2s,
+          gap 0.25s;
+      }
+      .page-dot::after {
+        content: "";
+        display: block;
+        width: 18px;
+        height: 1px;
+        background: currentColor;
+        transition:
+          width 0.25s,
+          background 0.25s,
+          box-shadow 0.25s;
+      }
+      .page-dot.active {
+        color: var(--text);
+      }
+      .page-dot.active::after {
+        width: 28px;
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent-glow);
+      }
+      .page-dot:hover {
+        color: var(--text);
+      }
+      .page-dot .label {
+        opacity: 0;
+        transform: translateX(8px);
+        transition:
+          opacity 0.25s,
+          transform 0.25s;
+        white-space: nowrap;
+      }
+      .page-dot:hover .label,
+      .page-dot.active .label {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      ::selection {
+        background: var(--accent);
+        color: var(--accent-ink);
+      }
+      button,
+      input,
+      textarea {
+        font-family: inherit;
+      }
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0);
         }
-      });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+        50% {
+          transform: translateY(4px);
+        }
+      }
+      .nav-link:hover {
+        color: var(--text) !important;
+      }
+      /* Ambient background: very subtle bottom glow hinting scroll-down */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 70% 32% at 50% 105%,
+          var(--accent-glow),
+          transparent 70%
+        );
+        opacity: 0.28;
+        pointer-events: none;
+        z-index: 0;
+        transition: opacity 0.4s ease;
+      }
+      body.at-end::before {
+        opacity: 0.08;
+      }
+      /* Scroll-hint at the bottom */
+      .scroll-hint {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 30;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        pointer-events: none;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 2.5px;
+        color: var(--text-muted);
+        opacity: 0.85;
+        transition: opacity 0.4s ease;
+      }
+      .scroll-hint.hidden {
+        opacity: 0;
+      }
+      .scroll-hint .chev {
+        width: 14px;
+        height: 14px;
+        border-right: 1.5px solid var(--accent);
+        border-bottom: 1.5px solid var(--accent);
+        transform: rotate(45deg);
+        animation: chev 1.8s ease-in-out infinite;
+        box-shadow: 2px 2px 8px var(--accent-glow);
+      }
+      @keyframes chev {
+        0%,
+        100% {
+          transform: rotate(45deg) translate(-3px, -3px);
+          opacity: 0.4;
+        }
+        50% {
+          transform: rotate(45deg) translate(3px, 3px);
+          opacity: 1;
+        }
+      }
+      #root {
+        position: relative;
+        z-index: 1;
+      }
+    </style>
 
-    // ── 4. Tweaks panel ───────────────────────────────────────
-    // Defaults — wrapped in EDITMODE markers so the host can persist edits.
-    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-      "font": "'IBM Plex Sans'",
-      "accent": "#ff6b3d"
-    }/*EDITMODE-END*/;
+    <script
+      src="https://unpkg.com/react@18.3.1/umd/react.development.js"
+      integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
+      integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+      integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
+      crossorigin="anonymous"
+    ></script>
 
-    const tweaks = { ...TWEAK_DEFAULTS };
-    const tweaksEl = document.getElementById('tweaks');
+    <script type="text/babel" src="tweaks-panel.jsx"></script>
+    <script type="text/babel" src="portfolio-pages.jsx"></script>
+  </head>
+  <body>
+    <div id="root"></div>
 
-    function applyFont(font) {
-      document.documentElement.style.setProperty('--font-ui', font + ", system-ui, sans-serif");
-      document.querySelectorAll('.twk-font').forEach(b => {
-        b.classList.toggle('active', b.dataset.font === font);
-      });
-      tweaks.font = font;
-    }
-    function applyAccent(color) {
-      document.documentElement.style.setProperty('--accent', color);
-      document.querySelectorAll('.twk-sw').forEach(b => {
-        b.classList.toggle('active', b.dataset.accent === color);
-      });
-      tweaks.accent = color;
-    }
+    <script type="text/babel">
+      const { useState, useEffect } = React;
 
-    document.getElementById('twk-fonts').addEventListener('click', (e) => {
-      const b = e.target.closest('.twk-font'); if (!b) return;
-      applyFont(b.dataset.font);
-      persist({ font: b.dataset.font });
-    });
-    document.getElementById('twk-swatches').addEventListener('click', (e) => {
-      const b = e.target.closest('.twk-sw'); if (!b) return;
-      applyAccent(b.dataset.accent);
-      persist({ accent: b.dataset.accent });
-    });
+      const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/ {
+        mode: "dark",
+        btnStyle: "pill",
+      }; /*EDITMODE-END*/
 
-    // Initial render of tweaks state
-    applyFont(tweaks.font);
-    applyAccent(tweaks.accent);
+      const PAGE_ORDER = ["Home", "About", "Projects", "Skills", "Contact"];
 
-    // ── 5. Host edit-mode protocol ────────────────────────────
-    // Listen first, THEN announce availability.
-    window.addEventListener('message', (e) => {
-      if (!e.data || typeof e.data !== 'object') return;
-      if (e.data.type === '__activate_edit_mode')   tweaksEl.classList.add('open');
-      if (e.data.type === '__deactivate_edit_mode') tweaksEl.classList.remove('open');
-    });
-    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+      function App() {
+        const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+        const [page, setPage] = useState("Home");
+        const cooldown = React.useRef(false);
 
-    document.getElementById('tweaks-close').addEventListener('click', () => {
-      tweaksEl.classList.remove('open');
-      window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
-    });
+        useEffect(() => {
+          applyTheme(tweaks.mode);
+        }, [tweaks.mode]);
 
-    function persist(edits) {
-      window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
-    }
-  </script>
-</body>
+        // Dim the bottom glow when we're on the last page
+        useEffect(() => {
+          const last = page === PAGE_ORDER[PAGE_ORDER.length - 1];
+          document.body.classList.toggle("at-end", last);
+        }, [page]);
+
+        // Wheel + keyboard nav between pages
+        useEffect(() => {
+          const go = (dir) => {
+            if (cooldown.current) return;
+            const idx = PAGE_ORDER.indexOf(page);
+            const next = idx + dir;
+            if (next < 0 || next >= PAGE_ORDER.length) return;
+            cooldown.current = true;
+            setPage(PAGE_ORDER[next]);
+            setTimeout(() => {
+              cooldown.current = false;
+            }, 850);
+          };
+          const onWheel = (e) => {
+            // let inputs / textareas scroll naturally
+            if (
+              e.target.closest &&
+              e.target.closest("textarea, input, .tweaks-panel")
+            )
+              return;
+            // let inner content scroll if not at boundary
+            const sec = e.target.closest && e.target.closest("main > section");
+            if (sec) {
+              const atTop = sec.scrollTop <= 0;
+              const atBottom =
+                sec.scrollTop + sec.clientHeight >= sec.scrollHeight - 2;
+              if (e.deltaY > 0 && !atBottom) return;
+              if (e.deltaY < 0 && !atTop) return;
+            }
+            if (Math.abs(e.deltaY) < 8) return;
+            go(e.deltaY > 0 ? 1 : -1);
+          };
+          const onKey = (e) => {
+            if (e.target.matches && e.target.matches("textarea, input")) return;
+            if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ")
+              go(1);
+            if (e.key === "ArrowUp" || e.key === "PageUp") go(-1);
+          };
+          window.addEventListener("wheel", onWheel, { passive: true });
+          window.addEventListener("keydown", onKey);
+          return () => {
+            window.removeEventListener("wheel", onWheel);
+            window.removeEventListener("keydown", onKey);
+          };
+        }, [page]);
+
+        // Touch swipe (mobile)
+        useEffect(() => {
+          let startY = null;
+          const onStart = (e) => {
+            startY = e.touches[0].clientY;
+          };
+          const onEnd = (e) => {
+            if (startY == null) return;
+            const dy = startY - e.changedTouches[0].clientY;
+            if (Math.abs(dy) < 60 || cooldown.current) return;
+            const idx = PAGE_ORDER.indexOf(page);
+            const next = idx + (dy > 0 ? 1 : -1);
+            if (next < 0 || next >= PAGE_ORDER.length) return;
+            cooldown.current = true;
+            setPage(PAGE_ORDER[next]);
+            setTimeout(() => {
+              cooldown.current = false;
+            }, 850);
+          };
+          window.addEventListener("touchstart", onStart, { passive: true });
+          window.addEventListener("touchend", onEnd, { passive: true });
+          return () => {
+            window.removeEventListener("touchstart", onStart);
+            window.removeEventListener("touchend", onEnd);
+          };
+        }, [page]);
+
+        const props = { onNav: setPage, btnStyle: tweaks.btnStyle };
+        return (
+          <>
+            <Header active={page} onNav={setPage} btnStyle={tweaks.btnStyle} />
+            <main key={page}>
+              {page === "Home" && <PageHome {...props} />}
+              {page === "About" && <PageAbout {...props} />}
+              {page === "Projects" && <PageProjects {...props} />}
+              {page === "Skills" && <PageSkills {...props} />}
+              {page === "Contact" && <PageContact {...props} />}
+            </main>
+
+            <div className="page-dots">
+              {PAGE_ORDER.map((p, i) => (
+                <button
+                  key={p}
+                  className={"page-dot" + (page === p ? " active" : "")}
+                  onClick={() => setPage(p)}
+                  aria-label={p}
+                >
+                  <span className="label">{p}</span>
+                </button>
+              ))}
+            </div>
+
+            <div
+              className={
+                "scroll-hint" +
+                (page === PAGE_ORDER[PAGE_ORDER.length - 1] ? " hidden" : "")
+              }
+            >
+              <span>SCROLL</span>
+              <span className="chev"></span>
+            </div>
+
+            <TweaksPanel title="Tweaks">
+              <TweakSection title="Theme">
+                <TweakRadio
+                  label="Mode"
+                  value={tweaks.mode}
+                  onChange={(v) => setTweak("mode", v)}
+                  options={[
+                    { value: "dark", label: "Dark" },
+                    { value: "light", label: "Light" },
+                  ]}
+                />
+              </TweakSection>
+              <TweakSection title="Buttons">
+                <TweakRadio
+                  label="Style"
+                  value={tweaks.btnStyle}
+                  onChange={(v) => setTweak("btnStyle", v)}
+                  options={[
+                    { value: "clean", label: "Clean" },
+                    { value: "pill", label: "Pill" },
+                    { value: "sketch", label: "Sketch" },
+                  ]}
+                />
+              </TweakSection>
+            </TweaksPanel>
+          </>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
 </html>
