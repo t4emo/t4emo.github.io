@@ -34,7 +34,13 @@ function applyTheme(mode) {
 /* ============================================================
    Button — three styles: sketch / clean / pill
    ============================================================ */
-function Btn({ children, onClick, primary = false, btnStyle = "clean", size = "md" }) {
+function Btn({
+  children,
+  onClick,
+  primary = false,
+  btnStyle = "clean",
+  size = "md",
+}) {
   const sizes = {
     sm: { px: 14, py: 8, fs: 13 },
     md: { px: 22, py: 13, fs: 15 },
@@ -44,7 +50,13 @@ function Btn({ children, onClick, primary = false, btnStyle = "clean", size = "m
 
   if (btnStyle === "sketch") {
     return (
-      <SketchButton onClick={onClick} primary={primary} fs={s.fs} px={s.px} py={s.py}>
+      <SketchButton
+        onClick={onClick}
+        primary={primary}
+        fs={s.fs}
+        px={s.px}
+        py={s.py}
+      >
         {children}
       </SketchButton>
     );
@@ -59,14 +71,17 @@ function Btn({ children, onClick, primary = false, btnStyle = "clean", size = "m
         padding: `${s.py}px ${s.px}px`,
         fontSize: s.fs,
         borderRadius: radius,
-        border: primary ? "1px solid var(--accent)" : "1px solid var(--border-strong)",
+        border: primary
+          ? "1px solid var(--accent)"
+          : "1px solid var(--border-strong)",
         background: primary ? "var(--accent)" : "transparent",
         color: primary ? "var(--accent-ink)" : "var(--text)",
         fontFamily: "inherit",
         fontWeight: 500,
         letterSpacing: 0.2,
         cursor: "pointer",
-        transition: "transform .18s ease, box-shadow .25s ease, background .2s ease",
+        transition:
+          "transform .18s ease, box-shadow .25s ease, background .2s ease",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateY(-1px)";
@@ -115,7 +130,9 @@ function SketchButton({ children, onClick, primary, fs, px, py }) {
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateY(-1px) rotate(-0.3deg)";
-        e.currentTarget.style.filter = primary ? "drop-shadow(0 6px 18px var(--accent-glow))" : "none";
+        e.currentTarget.style.filter = primary
+          ? "drop-shadow(0 6px 18px var(--accent-glow))"
+          : "none";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = "translateY(0)";
@@ -130,7 +147,14 @@ function SketchButton({ children, onClick, primary, fs, px, py }) {
           preserveAspectRatio="none"
           style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
         >
-          <path d={wobblyRectPath(w, h, 8)} fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d={wobblyRectPath(w, h, 8)}
+            fill="none"
+            stroke={stroke}
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       )}
       <span style={{ position: "relative", zIndex: 1 }}>{children}</span>
@@ -169,7 +193,8 @@ function Reveal({ children, delay = 0, style }) {
       style={{
         opacity: shown ? 1 : 0,
         transform: shown ? "translateY(0)" : "translateY(12px)",
-        transition: "opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1)",
+        transition:
+          "opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1)",
         ...style,
       }}
     >
@@ -194,10 +219,27 @@ function Header({ active, onNav, btnStyle }) {
         borderBottom: "1px solid var(--border)",
       }}
     >
-      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "18px 36px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div
+        style={{
+          maxWidth: 1180,
+          margin: "0 auto",
+          padding: "18px 36px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <div
           onClick={() => onNav("Home")}
-          style={{ fontSize: 22, fontWeight: 600, letterSpacing: -0.5, cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}
+          style={{
+            fontSize: 22,
+            fontWeight: 600,
+            letterSpacing: -0.5,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+          }}
         >
           <span
             style={{
@@ -260,7 +302,19 @@ function Header({ active, onNav, btnStyle }) {
    ============================================================ */
 function PageHome({ onNav, btnStyle }) {
   return (
-    <section data-screen-label="01 Home" style={{ minHeight: "calc(100vh - 64px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "60px 36px 100px", position: "relative", overflow: "hidden" }}>
+    <section
+      data-screen-label="01 Home"
+      style={{
+        minHeight: "calc(100vh - 64px)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "60px 36px 100px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
       {/* ambient glow */}
       <div
         aria-hidden
@@ -269,7 +323,8 @@ function PageHome({ onNav, btnStyle }) {
           width: 800,
           height: 800,
           borderRadius: "50%",
-          background: "radial-gradient(circle, var(--accent-glow) 0%, transparent 60%)",
+          background:
+            "radial-gradient(circle, var(--accent-glow) 0%, transparent 60%)",
           filter: "blur(40px)",
           opacity: 0.5,
           top: "-200px",
@@ -278,40 +333,99 @@ function PageHome({ onNav, btnStyle }) {
       />
       <div style={{ position: "relative", textAlign: "center", maxWidth: 920 }}>
         <Reveal delay={50}>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 3, color: "var(--text-muted)", marginBottom: 28 }}>
+          <div
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: 13,
+              letterSpacing: 3,
+              color: "var(--text-muted)",
+              marginBottom: 28,
+            }}
+          >
             ┌─ PORTFOLIO ─┐
           </div>
         </Reveal>
         <Reveal delay={120}>
-          <h1 style={{ margin: 0, fontSize: "clamp(72px, 14vw, 200px)", fontWeight: 600, letterSpacing: -6, lineHeight: 0.88 }}>
+          <h1
+            style={{
+              margin: 0,
+              fontSize: "clamp(72px, 14vw, 200px)",
+              fontWeight: 600,
+              letterSpacing: -6,
+              lineHeight: 0.88,
+            }}
+          >
             T4emo
           </h1>
         </Reveal>
         <Reveal delay={250}>
-          <p style={{ marginTop: 28, fontSize: 22, lineHeight: 1.45, color: "var(--text-muted)", maxWidth: 540, marginInline: "auto", textWrap: "pretty" }}>
-            Developer working with <span style={{ color: "var(--text)" }}>C++</span>, <span style={{ color: "var(--text)" }}>Java</span> &amp; <span style={{ color: "var(--text)" }}>C</span>. Building small, fast and well-crafted things.
-          </p>
-        </Reveal>
-        <Reveal delay={380} style={{ marginTop: 42, display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
-          <Btn primary size="lg" btnStyle={btnStyle} onClick={() => onNav("Contact")}>Contact me →</Btn>
-          <Btn size="lg" btnStyle={btnStyle}>Download CV ↓</Btn>
-        </Reveal>
-        <Reveal delay={600} style={{ marginTop: 90 }}>
-          <button
-            onClick={() => onNav("About")}
+          <p
             style={{
-              background: "transparent",
-              border: "none",
+              marginTop: 28,
+              fontSize: 22,
+              lineHeight: 1.45,
               color: "var(--text-muted)",
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: 12,
-              letterSpacing: 2,
-              cursor: "pointer",
-              animation: "bob 2.4s ease-in-out infinite",
+              maxWidth: 540,
+              marginInline: "auto",
+              textWrap: "pretty",
             }}
           >
-            ↓&nbsp;&nbsp;ABOUT ME
-          </button>
+            Developer working with{" "}
+            <span style={{ color: "var(--text)" }}>C++</span>,{" "}
+            <span style={{ color: "var(--text)" }}>Java</span> &amp;{" "}
+            <span style={{ color: "var(--text)" }}>C</span>. Building small,
+            fast and well-crafted things.
+          </p>
+        </Reveal>
+        <Reveal
+          delay={380}
+          style={{
+            marginTop: 42,
+            display: "flex",
+            gap: 14,
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <Btn
+            primary
+            size="lg"
+            btnStyle={btnStyle}
+            onClick={() => onNav("Contact")}
+          >
+            Contact me
+          </Btn>
+          <Btn size="lg" btnStyle={btnStyle}>
+            Download CV
+          </Btn>
+        </Reveal>
+        <Reveal delay={500} style={{ marginTop: 32, display: "flex", justifyContent: "center" }}>
+          <a
+            href="https://github.com/t4emo"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              color: "var(--text-muted)",
+              textDecoration: "none",
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: 13,
+              letterSpacing: 1.5,
+              border: "1px solid var(--border)",
+              borderRadius: 999,
+              padding: "8px 18px",
+              transition: "color .2s, border-color .2s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = "var(--text)"; e.currentTarget.style.borderColor = "var(--border-strong)"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "var(--text-muted)"; e.currentTarget.style.borderColor = "var(--border)"; }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/>
+            </svg>
+            github.com/t4emo
+          </a>
         </Reveal>
       </div>
     </section>
@@ -327,14 +441,32 @@ function PageAbout({ onNav, btnStyle }) {
     { value: "5", unit: "", label: "projects" },
   ];
   return (
-    <section data-screen-label="02 About" style={{ maxWidth: 1080, margin: "0 auto", padding: "90px 36px 120px" }}>
+    <section
+      data-screen-label="02 About"
+      style={{ maxWidth: 1080, margin: "0 auto", padding: "90px 36px 120px" }}
+    >
       <Reveal>
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, color: "var(--text-muted)" }}>
+        <div
+          style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 12,
+            letterSpacing: 3,
+            color: "var(--text-muted)",
+          }}
+        >
           / ABOUT
         </div>
       </Reveal>
       <Reveal delay={80}>
-        <h2 style={{ fontSize: "clamp(48px, 8vw, 96px)", margin: "12px 0 60px", fontWeight: 600, letterSpacing: -3, lineHeight: 0.95 }}>
+        <h2
+          style={{
+            fontSize: "clamp(48px, 8vw, 96px)",
+            margin: "12px 0 60px",
+            fontWeight: 600,
+            letterSpacing: -3,
+            lineHeight: 0.95,
+          }}
+        >
           About me.
         </h2>
       </Reveal>
@@ -342,14 +474,43 @@ function PageAbout({ onNav, btnStyle }) {
       <div style={{ maxWidth: 720 }}>
         <Reveal delay={250}>
           <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-            <p style={{ fontSize: 20, lineHeight: 1.55, color: "var(--text)", margin: 0, textWrap: "pretty" }}>
-              I'm T4emo — a developer who likes <span style={{ color: "var(--accent)" }}>low-level</span> systems, clean code, and shipping small things that actually work.
+            <p
+              style={{
+                fontSize: 20,
+                lineHeight: 1.55,
+                color: "var(--text)",
+                margin: 0,
+                textWrap: "pretty",
+              }}
+            >
+              I'm T4emo — a developer who likes{" "}
+              <span style={{ color: "var(--accent)" }}>low-level</span> systems,
+              clean code, and shipping small things that actually work.
             </p>
-            <p style={{ fontSize: 17, lineHeight: 1.65, color: "var(--text-muted)", margin: 0, textWrap: "pretty" }}>
-              Mainly working in C, C++ and Java. I care about readable code, real performance, and the kind of details that only show up when you look twice. Currently looking for an internship / first role where I can keep learning fast.
+            <p
+              style={{
+                fontSize: 17,
+                lineHeight: 1.65,
+                color: "var(--text-muted)",
+                margin: 0,
+                textWrap: "pretty",
+              }}
+            >
+              Mainly working in C, C++ and Java. I care about readable code,
+              real performance, and the kind of details that only show up when
+              you look twice. Currently looking for an internship / first role
+              where I can keep learning fast.
             </p>
 
-            <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, maxWidth: 440 }}>
+            <div
+              style={{
+                marginTop: 14,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 16,
+                maxWidth: 440,
+              }}
+            >
               {stats.map((s) => (
                 <div
                   key={s.label}
@@ -360,11 +521,38 @@ function PageAbout({ onNav, btnStyle }) {
                     background: "var(--bg-elev)",
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-                    <span style={{ fontSize: 48, fontWeight: 600, letterSpacing: -2, lineHeight: 1, color: "var(--accent)" }}>{s.value}</span>
-                    {s.unit && <span style={{ fontSize: 16, color: "var(--text-muted)" }}>{s.unit}</span>}
+                  <div
+                    style={{ display: "flex", alignItems: "baseline", gap: 6 }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 48,
+                        fontWeight: 600,
+                        letterSpacing: -2,
+                        lineHeight: 1,
+                        color: "var(--accent)",
+                      }}
+                    >
+                      {s.value}
+                    </span>
+                    {s.unit && (
+                      <span
+                        style={{ fontSize: 16, color: "var(--text-muted)" }}
+                      >
+                        {s.unit}
+                      </span>
+                    )}
                   </div>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 2, color: "var(--text-muted)", marginTop: 8, textTransform: "uppercase" }}>
+                  <div
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      fontSize: 11,
+                      letterSpacing: 2,
+                      color: "var(--text-muted)",
+                      marginTop: 8,
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {s.label}
                   </div>
                 </div>
@@ -382,54 +570,90 @@ function PageAbout({ onNav, btnStyle }) {
    ============================================================ */
 function PageProjects({ onNav, btnStyle }) {
   const projects = [
-    { n: "01", title: "Project One", desc: "Short description of what this project does and why it matters.", tags: ["C++", "CMake"] },
-    { n: "02", title: "Project Two", desc: "Short description of the second project. Replace with the real thing.", tags: ["Java", "Git"] },
-    { n: "03", title: "Project Three", desc: "Short description of this project. Replace with real content.", tags: ["C", "Git"] },
-    { n: "04", title: "Project Four", desc: "Short description of this project. Replace with real content.", tags: ["C++", "Git"] },
-    { n: "05", title: "Project Five", desc: "Short description of this project. Replace with real content.", tags: ["Java", "C++"] },
+    {
+      n: "01",
+      title: "Project One",
+      desc: "Short description of what this project does and why it matters.",
+      tags: ["C++", "CMake"],
+    },
+    {
+      n: "02",
+      title: "Project Two",
+      desc: "Short description of the second project. Replace with the real thing.",
+      tags: ["Java", "Git"],
+    },
+    {
+      n: "03",
+      title: "Project Three",
+      desc: "Short description of this project. Replace with real content.",
+      tags: ["C", "Git"],
+    },
   ];
   return (
-    <section data-screen-label="03 Projects" style={{ maxWidth: 1180, margin: "0 auto", padding: "90px 36px 120px" }}>
+    <section
+      data-screen-label="03 Projects"
+      style={{ maxWidth: 1180, margin: "0 auto", padding: "90px 36px 120px" }}
+    >
       <Reveal>
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, color: "var(--text-muted)" }}>
+        <div
+          style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 12,
+            letterSpacing: 3,
+            color: "var(--text-muted)",
+          }}
+        >
           / PROJECTS
         </div>
       </Reveal>
       <Reveal delay={80}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", margin: "12px 0 60px", gap: 24, flexWrap: "wrap" }}>
-          <h2 style={{ fontSize: "clamp(48px, 8vw, 96px)", margin: 0, fontWeight: 600, letterSpacing: -3, lineHeight: 0.95 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            margin: "12px 0 60px",
+            gap: 24,
+            flexWrap: "wrap",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "clamp(48px, 8vw, 96px)",
+              margin: 0,
+              fontWeight: 600,
+              letterSpacing: -3,
+              lineHeight: 0.95,
+            }}
+          >
             My projects.
           </h2>
-          <div style={{ color: "var(--text-muted)", fontSize: 15, maxWidth: 340, textWrap: "pretty" }}>
+          <div
+            style={{
+              color: "var(--text-muted)",
+              fontSize: 15,
+              maxWidth: 340,
+              textWrap: "pretty",
+            }}
+          >
             A short selection — quality over quantity.
           </div>
         </div>
       </Reveal>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 20,
+        }}
+      >
         {projects.map((p, i) => (
           <Reveal key={p.n} delay={150 + i * 100}>
             <ProjectCard project={p} />
           </Reveal>
         ))}
       </div>
-
-      <Reveal delay={420} style={{ textAlign: "center", marginTop: 60 }}>
-        <button
-          onClick={() => onNav("Skills")}
-          style={{
-            background: "transparent",
-            border: "none",
-            color: "var(--accent)",
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: 13,
-            letterSpacing: 2,
-            cursor: "pointer",
-          }}
-        >
-          SEE MY SKILLS →
-        </button>
-      </Reveal>
     </section>
   );
 }
@@ -446,10 +670,13 @@ function ProjectCard({ project }) {
         borderRadius: 14,
         background: "var(--bg-elev)",
         padding: 24,
-        transition: "transform .3s cubic-bezier(.2,.7,.2,1), border-color .3s, box-shadow .3s",
+        transition:
+          "transform .3s cubic-bezier(.2,.7,.2,1), border-color .3s, box-shadow .3s",
         transform: hover ? "translateY(-4px)" : "translateY(0)",
         borderColor: hover ? "var(--accent)" : "var(--border)",
-        boxShadow: hover ? "0 24px 60px rgba(0,0,0,0.25), 0 0 0 1px var(--accent-glow)" : "none",
+        boxShadow: hover
+          ? "0 24px 60px rgba(0,0,0,0.25), 0 0 0 1px var(--accent-glow)"
+          : "none",
         cursor: "pointer",
         overflow: "hidden",
       }}
@@ -466,13 +693,35 @@ function ProjectCard({ project }) {
           border: "1px solid var(--border)",
         }}
       >
-        <svg width="100%" height="100%" style={{ position: "absolute", inset: 0 }}>
+        <svg
+          width="100%"
+          height="100%"
+          style={{ position: "absolute", inset: 0 }}
+        >
           <defs>
-            <pattern id={`stripes-${project.n}`} patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(45)">
-              <line x1="0" y1="0" x2="0" y2="18" stroke="var(--border)" strokeWidth="2" />
+            <pattern
+              id={`stripes-${project.n}`}
+              patternUnits="userSpaceOnUse"
+              width="18"
+              height="18"
+              patternTransform="rotate(45)"
+            >
+              <line
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="18"
+                stroke="var(--border)"
+                strokeWidth="2"
+              />
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill={`url(#stripes-${project.n})`} opacity="0.7" />
+          <rect
+            width="100%"
+            height="100%"
+            fill={`url(#stripes-${project.n})`}
+            opacity="0.7"
+          />
         </svg>
         <span
           style={{
@@ -489,11 +738,45 @@ function ProjectCard({ project }) {
         </span>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
-        <h3 style={{ margin: 0, fontSize: 26, fontWeight: 600, letterSpacing: -0.5 }}>{project.title}</h3>
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "var(--text-muted)" }}>{project.n}</span>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          gap: 12,
+        }}
+      >
+        <h3
+          style={{
+            margin: 0,
+            fontSize: 26,
+            fontWeight: 600,
+            letterSpacing: -0.5,
+          }}
+        >
+          {project.title}
+        </h3>
+        <span
+          style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 12,
+            color: "var(--text-muted)",
+          }}
+        >
+          {project.n}
+        </span>
       </div>
-      <p style={{ margin: "12px 0 18px", fontSize: 15, lineHeight: 1.55, color: "var(--text-muted)", textWrap: "pretty" }}>{project.desc}</p>
+      <p
+        style={{
+          margin: "12px 0 18px",
+          fontSize: 15,
+          lineHeight: 1.55,
+          color: "var(--text-muted)",
+          textWrap: "pretty",
+        }}
+      >
+        {project.desc}
+      </p>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         {project.tags.map((t) => (
           <span
@@ -511,7 +794,13 @@ function ProjectCard({ project }) {
             }}
           >
             {TECH_ICONS[t] && (
-              <img src={TECH_ICONS[t]} alt={t} width={14} height={14} style={{ display: "block" }} />
+              <img
+                src={TECH_ICONS[t]}
+                alt={t}
+                width={14}
+                height={14}
+                style={{ display: "block" }}
+              />
             )}
             {t}
           </span>
@@ -531,7 +820,9 @@ function ProjectCard({ project }) {
           justifyContent: "center",
           fontSize: 14,
           transition: "transform .3s, background .3s, color .3s",
-          transform: hover ? "translate(0,0) rotate(0)" : "translate(0,0) rotate(-30deg)",
+          transform: hover
+            ? "translate(0,0) rotate(0)"
+            : "translate(0,0) rotate(-30deg)",
           background: hover ? "var(--accent)" : "transparent",
           color: hover ? "var(--accent-ink)" : "var(--text)",
           borderColor: hover ? "var(--accent)" : "var(--border-strong)",
@@ -549,38 +840,58 @@ function ProjectCard({ project }) {
 const DEVICON = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons";
 const TECH_ICONS = {
   "C++": `${DEVICON}/cplusplus/cplusplus-original.svg`,
-  "Java": `${DEVICON}/java/java-original.svg`,
-  "C": `${DEVICON}/c/c-original.svg`,
-  "Git": `${DEVICON}/git/git-original.svg`,
-  "CMake": `${DEVICON}/cmake/cmake-original.svg`,
+  Java: `${DEVICON}/java/java-original.svg`,
+  C: `${DEVICON}/c/c-original.svg`,
+  Git: `${DEVICON}/git/git-original.svg`,
+  CMake: `${DEVICON}/cmake/cmake-original.svg`,
 };
 
 function PageSkills({ onNav, btnStyle }) {
   const skills = ["C++", "Java", "C", "Git"];
   return (
-    <section data-screen-label="04 Skills" style={{ maxWidth: 1080, margin: "0 auto", padding: "90px 36px 120px" }}>
+    <section
+      data-screen-label="04 Skills"
+      style={{ maxWidth: 1080, margin: "0 auto", padding: "90px 36px 120px" }}
+    >
       <Reveal>
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, color: "var(--text-muted)" }}>
+        <div
+          style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 12,
+            letterSpacing: 3,
+            color: "var(--text-muted)",
+          }}
+        >
           / SKILLS
         </div>
       </Reveal>
       <Reveal delay={80}>
-        <h2 style={{ fontSize: "clamp(48px, 8vw, 96px)", margin: "12px 0 60px", fontWeight: 600, letterSpacing: -3, lineHeight: 0.95 }}>
+        <h2
+          style={{
+            fontSize: "clamp(48px, 8vw, 96px)",
+            margin: "12px 0 60px",
+            fontWeight: 600,
+            letterSpacing: -3,
+            lineHeight: 0.95,
+          }}
+        >
           Skills.
         </h2>
       </Reveal>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 22 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 22,
+        }}
+      >
         {skills.map((name, i) => (
           <Reveal key={name} delay={150 + i * 90}>
             <SkillTile name={name} />
           </Reveal>
         ))}
       </div>
-
-      <Reveal delay={600} style={{ marginTop: 70, display: "flex", gap: 14, justifyContent: "center" }}>
-        <Btn primary btnStyle={btnStyle} onClick={() => onNav("Contact")}>Contact me</Btn>
-      </Reveal>
     </section>
   );
 }
@@ -601,7 +912,8 @@ function SkillTile({ name }) {
         justifyContent: "center",
         position: "relative",
         cursor: "default",
-        transition: "transform .3s cubic-bezier(.2,.7,.2,1), border-color .3s, box-shadow .3s",
+        transition:
+          "transform .3s cubic-bezier(.2,.7,.2,1), border-color .3s, box-shadow .3s",
         transform: hover ? "translateY(-6px)" : "translateY(0)",
         borderColor: hover ? "var(--accent)" : "var(--border)",
         boxShadow: hover
@@ -621,23 +933,6 @@ function SkillTile({ name }) {
           transform: hover ? "scale(1.08) rotate(-4deg)" : "scale(1)",
         }}
       />
-      <span
-        style={{
-          position: "absolute",
-          bottom: 14,
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          fontFamily: "'JetBrains Mono', monospace",
-          fontSize: 11,
-          letterSpacing: 2,
-          color: "var(--text-muted)",
-          opacity: hover ? 1 : 0.5,
-          transition: "opacity .25s, color .25s",
-        }}
-      >
-        {name.toUpperCase()}
-      </span>
     </div>
   );
 }
@@ -647,20 +942,47 @@ function SkillTile({ name }) {
    ============================================================ */
 function PageContact({ onNav, btnStyle }) {
   return (
-    <section data-screen-label="05 Contact" style={{ maxWidth: 880, margin: "0 auto", padding: "90px 36px 120px" }}>
+    <section
+      data-screen-label="05 Contact"
+      style={{ maxWidth: 880, margin: "0 auto", padding: "90px 36px 120px" }}
+    >
       <Reveal>
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, color: "var(--text-muted)" }}>
+        <div
+          style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 12,
+            letterSpacing: 3,
+            color: "var(--text-muted)",
+          }}
+        >
           / CONTACT
         </div>
       </Reveal>
       <Reveal delay={80}>
-        <h2 style={{ fontSize: "clamp(48px, 8vw, 96px)", margin: "12px 0 30px", fontWeight: 600, letterSpacing: -3, lineHeight: 0.95 }}>
+        <h2
+          style={{
+            fontSize: "clamp(48px, 8vw, 96px)",
+            margin: "12px 0 30px",
+            fontWeight: 600,
+            letterSpacing: -3,
+            lineHeight: 0.95,
+          }}
+        >
           Let's talk.
         </h2>
       </Reveal>
       <Reveal delay={160}>
-        <p style={{ fontSize: 18, color: "var(--text-muted)", margin: "0 0 50px", maxWidth: 560, textWrap: "pretty" }}>
-          Open to internships, freelance and side-projects. Drop a line and I'll get back to you.
+        <p
+          style={{
+            fontSize: 18,
+            color: "var(--text-muted)",
+            margin: "0 0 50px",
+            maxWidth: 560,
+            textWrap: "pretty",
+          }}
+        >
+          Open to internships, freelance and side-projects. Drop a line and I'll
+          get back to you.
         </p>
       </Reveal>
       <Reveal delay={240}>
@@ -669,7 +991,9 @@ function PageContact({ onNav, btnStyle }) {
           <Field label="Email" />
           <Field label="Message" textarea />
           <div style={{ marginTop: 10 }}>
-            <Btn primary size="lg" btnStyle={btnStyle}>Send →</Btn>
+            <Btn primary size="lg" btnStyle={btnStyle}>
+              Send →
+            </Btn>
           </div>
         </div>
       </Reveal>
@@ -681,7 +1005,14 @@ function Field({ label, textarea }) {
   const [focus, setFocus] = useState(false);
   return (
     <label style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 2, color: "var(--text-muted)" }}>
+      <span
+        style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: 11,
+          letterSpacing: 2,
+          color: "var(--text-muted)",
+        }}
+      >
         {label.toUpperCase()}
       </span>
       {textarea ? (
@@ -731,15 +1062,52 @@ function Field({ label, textarea }) {
    ============================================================ */
 function Footer() {
   return (
-    <footer style={{ borderTop: "1px solid var(--border)", padding: "30px 36px", marginTop: 80 }}>
-      <div style={{ maxWidth: 1180, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "var(--text-muted)", letterSpacing: 1 }}>
+    <footer
+      style={{
+        borderTop: "1px solid var(--border)",
+        padding: "30px 36px",
+        marginTop: 80,
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1180,
+          margin: "0 auto",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 24,
+          flexWrap: "wrap",
+        }}
+      >
+        <div
+          style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 12,
+            color: "var(--text-muted)",
+            letterSpacing: 1,
+          }}
+        >
           © 2026 · T4EMO
         </div>
-        <div style={{ display: "flex", gap: 18, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "var(--text-muted)" }}>
-          <a href="#" style={{ color: "inherit", textDecoration: "none" }}>github</a>
-          <a href="#" style={{ color: "inherit", textDecoration: "none" }}>linkedin</a>
-          <a href="#" style={{ color: "inherit", textDecoration: "none" }}>email</a>
+        <div
+          style={{
+            display: "flex",
+            gap: 18,
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 12,
+            color: "var(--text-muted)",
+          }}
+        >
+          <a href="https://github.com/t4emo" target="_blank" rel="noreferrer" style={{ color: "inherit", textDecoration: "none" }}>
+            github
+          </a>
+          <a href="#" style={{ color: "inherit", textDecoration: "none" }}>
+            linkedin
+          </a>
+          <a href="#" style={{ color: "inherit", textDecoration: "none" }}>
+            email
+          </a>
         </div>
       </div>
     </footer>
