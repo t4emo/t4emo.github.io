@@ -210,6 +210,33 @@
         position: relative;
         z-index: 1;
       }
+      /* Responsive grids */
+      .grid-projects {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .grid-skills {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+      }
+      @media (max-width: 900px) {
+        .grid-projects {
+          grid-template-columns: 1fr;
+        }
+        .grid-skills {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 520px) {
+        .grid-skills {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        nav {
+          display: none;
+        }
+      }
     </style>
 
     <script
@@ -357,6 +384,11 @@
               ))}
             </div>
 
+
+            <div className={"scroll-hint" + (page === PAGE_ORDER[PAGE_ORDER.length - 1] ? " hidden" : "")}>
+              <span>SCROLL</span>
+              <div className="chev" />
+            </div>
 
             <TweaksPanel title="Tweaks">
               <TweakSection title="Theme">

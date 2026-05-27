@@ -370,11 +370,11 @@ function PageHome({ onNav, btnStyle }) {
               textWrap: "pretty",
             }}
           >
-            Developer working with{" "}
-            <span style={{ color: "var(--text)" }}>C++</span>,{" "}
-            <span style={{ color: "var(--text)" }}>Java</span> &amp;{" "}
-            <span style={{ color: "var(--text)" }}>C</span>. Building small,
-            fast and well-crafted things.
+            Learning{" "}
+            <span style={{ color: "var(--text)" }}>web development</span>{" "}
+            through{" "}
+            <span style={{ color: "var(--text)" }}>The Odin Project</span>.
+            Building real things from scratch, one project at a time.
           </p>
         </Reveal>
         <Reveal
@@ -483,9 +483,10 @@ function PageAbout({ onNav, btnStyle }) {
                 textWrap: "pretty",
               }}
             >
-              I'm T4emo — a developer who likes{" "}
-              <span style={{ color: "var(--accent)" }}>low-level</span> systems,
-              clean code, and shipping small things that actually work.
+              I'm T4emo — I studied C, C++ and Java at school, and I'm now
+              diving into{" "}
+              <span style={{ color: "var(--accent)" }}>web development</span>{" "}
+              through The Odin Project.
             </p>
             <p
               style={{
@@ -496,10 +497,10 @@ function PageAbout({ onNav, btnStyle }) {
                 textWrap: "pretty",
               }}
             >
-              Mainly working in C, C++ and Java. I care about readable code,
-              real performance, and the kind of details that only show up when
-              you look twice. Currently looking for an internship / first role
-              where I can keep learning fast.
+              I like building things from scratch and understanding how they
+              work. Currently working through HTML, CSS and JavaScript —
+              shipping small projects as I go. Open to any opportunity where
+              I can keep learning fast.
             </p>
 
             <div
@@ -572,21 +573,24 @@ function PageProjects({ onNav, btnStyle }) {
   const projects = [
     {
       n: "01",
-      title: "Project One",
-      desc: "Short description of what this project does and why it matters.",
-      tags: ["C++", "CMake"],
+      title: "Rock Paper Scissors",
+      desc: "Classic game built in vanilla JavaScript. DOM manipulation, game logic and a clean UI — my first real JS project via The Odin Project.",
+      tags: ["JavaScript", "HTML", "CSS"],
+      url: "https://github.com/t4emo/odin-Rock-Paper-Scissors",
     },
     {
       n: "02",
-      title: "Project Two",
-      desc: "Short description of the second project. Replace with the real thing.",
-      tags: ["Java", "Git"],
+      title: "Coming soon",
+      desc: "Next project in progress — stay tuned.",
+      tags: [],
+      coming: true,
     },
     {
       n: "03",
-      title: "Project Three",
-      desc: "Short description of this project. Replace with real content.",
-      tags: ["C", "Git"],
+      title: "Coming soon",
+      desc: "More to come as the Odin Project journey continues.",
+      tags: [],
+      coming: true,
     },
   ];
   return (
@@ -641,13 +645,7 @@ function PageProjects({ onNav, btnStyle }) {
         </div>
       </Reveal>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 20,
-        }}
-      >
+      <div className="grid-projects">
         {projects.map((p, i) => (
           <Reveal key={p.n} delay={150 + i * 100}>
             <ProjectCard project={p} />
@@ -660,25 +658,30 @@ function PageProjects({ onNav, btnStyle }) {
 
 function ProjectCard({ project }) {
   const [hover, setHover] = useState(false);
+  const handleClick = () => {
+    if (project.url) window.open(project.url, "_blank", "noreferrer");
+  };
   return (
     <div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      onClick={handleClick}
       style={{
         position: "relative",
         border: "1px solid var(--border)",
         borderRadius: 14,
-        background: "var(--bg-elev)",
+        background: project.coming ? "var(--bg-sunk)" : "var(--bg-elev)",
         padding: 24,
         transition:
           "transform .3s cubic-bezier(.2,.7,.2,1), border-color .3s, box-shadow .3s",
-        transform: hover ? "translateY(-4px)" : "translateY(0)",
-        borderColor: hover ? "var(--accent)" : "var(--border)",
-        boxShadow: hover
+        transform: hover && !project.coming ? "translateY(-4px)" : "translateY(0)",
+        borderColor: hover && !project.coming ? "var(--accent)" : "var(--border)",
+        boxShadow: hover && !project.coming
           ? "0 24px 60px rgba(0,0,0,0.25), 0 0 0 1px var(--accent-glow)"
           : "none",
-        cursor: "pointer",
+        cursor: project.coming ? "default" : "pointer",
         overflow: "hidden",
+        opacity: project.coming ? 0.45 : 1,
       }}
     >
       {/* Visual */}
@@ -806,30 +809,32 @@ function ProjectCard({ project }) {
           </span>
         ))}
       </div>
-      <div
-        style={{
-          position: "absolute",
-          right: 18,
-          bottom: 18,
-          width: 36,
-          height: 36,
-          borderRadius: 999,
-          border: "1px solid var(--border-strong)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: 14,
-          transition: "transform .3s, background .3s, color .3s",
-          transform: hover
-            ? "translate(0,0) rotate(0)"
-            : "translate(0,0) rotate(-30deg)",
-          background: hover ? "var(--accent)" : "transparent",
-          color: hover ? "var(--accent-ink)" : "var(--text)",
-          borderColor: hover ? "var(--accent)" : "var(--border-strong)",
-        }}
-      >
-        →
-      </div>
+      {!project.coming && (
+        <div
+          style={{
+            position: "absolute",
+            right: 18,
+            bottom: 18,
+            width: 36,
+            height: 36,
+            borderRadius: 999,
+            border: "1px solid var(--border-strong)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 14,
+            transition: "transform .3s, background .3s, color .3s",
+            transform: hover
+              ? "translate(0,0) rotate(0)"
+              : "translate(0,0) rotate(-30deg)",
+            background: hover ? "var(--accent)" : "transparent",
+            color: hover ? "var(--accent-ink)" : "var(--text)",
+            borderColor: hover ? "var(--accent)" : "var(--border-strong)",
+          }}
+        >
+          ↗
+        </div>
+      )}
     </div>
   );
 }
@@ -839,15 +844,14 @@ function ProjectCard({ project }) {
    ============================================================ */
 const DEVICON = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons";
 const TECH_ICONS = {
-  "C++": `${DEVICON}/cplusplus/cplusplus-original.svg`,
-  Java: `${DEVICON}/java/java-original.svg`,
-  C: `${DEVICON}/c/c-original.svg`,
+  JavaScript: `${DEVICON}/javascript/javascript-original.svg`,
+  HTML: `${DEVICON}/html5/html5-original.svg`,
+  CSS: `${DEVICON}/css3/css3-original.svg`,
   Git: `${DEVICON}/git/git-original.svg`,
-  CMake: `${DEVICON}/cmake/cmake-original.svg`,
 };
 
 function PageSkills({ onNav, btnStyle }) {
-  const skills = ["C++", "Java", "C", "Git"];
+  const skills = ["JavaScript", "HTML", "CSS", "Git"];
   return (
     <section
       data-screen-label="04 Skills"
@@ -879,13 +883,7 @@ function PageSkills({ onNav, btnStyle }) {
         </h2>
       </Reveal>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 22,
-        }}
-      >
+      <div className="grid-skills">
         {skills.map((name, i) => (
           <Reveal key={name} delay={150 + i * 90}>
             <SkillTile name={name} />
