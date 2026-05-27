@@ -848,10 +848,13 @@ const TECH_ICONS = {
   HTML: `${DEVICON}/html5/html5-original.svg`,
   CSS: `${DEVICON}/css3/css3-original.svg`,
   Git: `${DEVICON}/git/git-original.svg`,
+  "C++": `${DEVICON}/cplusplus/cplusplus-original.svg`,
+  Java: `${DEVICON}/java/java-original.svg`,
+  C: `${DEVICON}/c/c-original.svg`,
 };
 
 function PageSkills({ onNav, btnStyle }) {
-  const skills = ["JavaScript", "HTML", "CSS", "Git"];
+  const skills = ["JavaScript", "HTML", "CSS", "Git", "C++", "Java", "C"];
   return (
     <section
       data-screen-label="04 Skills"
